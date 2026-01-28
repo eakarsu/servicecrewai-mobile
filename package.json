@@ -1,0 +1,30 @@
+{
+  "name": "servicecrewai-mobile",
+  "version": "1.0.0",
+  "description": "ServiceCrew AI Mobile App for iOS",
+  "main": "index.js",
+  "scripts": {
+    "build": "echo 'Build complete'",
+    "sync": "npx cap sync ios",
+    "open": "npx cap open ios",
+    "run:ios": "npx cap run ios"
+  },
+  "keywords": [
+    "field-service",
+    "hvac",
+    "plumbing",
+    "electrical",
+    "mobile"
+  ],
+  "author": "ServiceCrew AI",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "@capacitor/camera": "^7.0.2",
+    "@capacitor/cli": "^7.4.4",
+    "@capacitor/core": "^7.4.4",
+    "@capacitor/geolocation": "^7.1.6",
+    "@capacitor/ios": "^7.4.4",
+    "@capacitor/push-notifications": "^7.0.3"
+  }
+}

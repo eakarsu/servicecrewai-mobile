@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body { margin: 0; padding: 0; }
+        canvas { display: block; }
+    </style>
+</head>
+<body>
+    <canvas id="canvas" width="1024" height="1024"></canvas>
+    <script>
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        const size = 1024;
+        
+        // White background
+        ctx.fillStyle = '#ffffff';
+        ctx.fillRect(0, 0, size, size);
+        
+        // Draw subtle grid
+        ctx.strokeStyle = '#e5e7eb';
+        ctx.lineWidth = 1;
+        const gridSize = 80;
+        
+        // Diagonal lines (top-left to bottom-right)
+        for (let i = -size; i < size * 2; i += gridSize) {
+            ctx.beginPath();
+            ctx.moveTo(i, 0);
+            ctx.lineTo(i + size, size);
+            ctx.stroke();
+        }
+        
+        // Diagonal lines (top-right to bottom-left)
+        for (let i = -size; i < size * 2; i += gridSize) {
+            ctx.beginPath();
+            ctx.moveTo(i, size);
+            ctx.lineTo(i + size, 0);
+            ctx.stroke();
+        }
+        
+        // Draw the X shape
+        ctx.fillStyle = '#5cb5f0';
+        const centerX = size / 2;
+        const centerY = size / 2;
+        const armWidth = 120;
+        const armLength = 280;
+        
+        ctx.save();
+        ctx.translate(centerX, centerY);
+        
+        // First arm of X (top-left to bottom-right)
+        ctx.rotate(Math.PI / 4);
+        ctx.fillRect(-armWidth/2, -armLength - armWidth/2, armWidth, armLength * 2 + armWidth);
+        
+        // Second arm of X (top-right to bottom-left)
+        ctx.rotate(Math.PI / 2);
+        ctx.fillRect(-armWidth/2, -armLength - armWidth/2, armWidth, armLength * 2 + armWidth);
+        
+        ctx.restore();
+        
+        // Output as data URL
+        console.log(canvas.toDataURL('image/png'));
+    </script>
+</body>
+</html>
