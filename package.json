@@ -2,12 +2,13 @@
   "name": "servicecrewai-mobile",
   "version": "1.0.0",
   "description": "ServiceCrew AI Mobile App for iOS",
-  "main": "index.js",
+  "main": "dist/app.js",
   "scripts": {
-    "build": "echo 'Build complete'",
-    "sync": "npx cap sync ios",
-    "open": "npx cap open ios",
-    "run:ios": "npx cap run ios"
+    "build": "node scripts/build.cjs",
+    "check": "node --check src/app.js && node --check scripts/build.cjs",
+    "sync": "npm run build && cap sync ios",
+    "open": "cap open ios",
+    "run:ios": "npm run build && cap run ios"
   },
   "keywords": [
     "field-service",
