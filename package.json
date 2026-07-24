@@ -6,6 +6,9 @@
   "scripts": {
     "build": "node scripts/build.cjs",
     "check": "node --check src/app.js && node --check scripts/build.cjs",
+    "test": "node --test runtime/test-runtime.cjs",
+    "migrate": "node runtime/migrate.cjs",
+    "create-admin": "node runtime/create-admin.cjs",
     "sync": "npm run build && cap sync ios",
     "open": "cap open ios",
     "run:ios": "npm run build && cap run ios"
