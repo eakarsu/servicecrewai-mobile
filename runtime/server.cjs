@@ -42,6 +42,12 @@ const server = http.createServer(async (request, response) => {
     if (request.method === 'OPTIONS') { response.writeHead(204, { 'access-control-allow-methods': 'GET,POST,OPTIONS', 'access-control-allow-headers': 'authorization,content-type' }); return response.end(); }
     const url = new URL(request.url, `http://${host}:${port}`);
     if (request.method === 'GET' && ['/health', '/api/health'].includes(url.pathname)) { query('SELECT 1'); return send(response, 200, { status: 'ok', database: 'reachable', service: 'servicecrew-runtime' }); }
+    if (request.method === 'GET' && url.pathname === '/api/auth/demo-credentials') {
+      if (process.env.NODE_ENV === 'production') return send(response, 404, { error: 'Not found' });
+      const email = process.env.DEMO_EMAIL || process.env.PROVISION_ADMIN_EMAIL || process.env.ADMIN_EMAIL;
+      const password = process.env.DEMO_PASSWORD || process.env.PROVISION_ADMIN_PASSWORD || process.env.ADMIN_PASSWORD;
+      return email && password ? send(response, 200, { email, password }) : send(response, 503, { error: 'Demo credentials are not configured' });
+    }
     if (request.method === 'POST' && url.pathname === '/api/auth/login') {
       const payload = await body(request); const email = typeof payload.email === 'string' ? payload.email.trim().toLowerCase() : ''; const password = typeof payload.password === 'string' ? payload.password : '';
       const user = email ? json(`SELECT id,email,name,role,password_hash FROM servicecrew_runtime_users WHERE email=${literal(email)} AND active=TRUE`) : null;
