@@ -5,6 +5,12 @@
 }
 
 body { margin: 0; min-height: 100vh; }
+.app-layout{display:grid;grid-template-columns:220px minmax(0,1fr);min-height:100vh}
+.app-layout main{min-width:0;width:min(42rem,calc(100% - 24px))}
+.app-sidebar{position:sticky;top:0;height:100vh;overflow:auto;padding:22px 12px;background:#0b1220;color:#f8fafc;border-right:1px solid #26364d;display:flex;flex-direction:column;gap:16px}
+.app-sidebar strong{display:block;padding:8px 8px 16px;border-bottom:1px solid #334155;font-size:16px}
+.app-sidebar nav{display:flex;flex-direction:column;gap:3px}.app-sidebar a{color:#cbd5e1;text-decoration:none;padding:9px 11px;border-radius:8px;font-size:13px;font-weight:600}.app-sidebar a:hover,.app-sidebar a:focus-visible{background:#1e293b;color:#fff}
+@media(max-width:700px){.app-layout{grid-template-columns:1fr}.app-sidebar{position:relative;height:auto;padding:12px}.app-sidebar nav{flex-direction:row;overflow:auto}.app-sidebar a{white-space:nowrap}}
 main { max-width: 42rem; margin: 0 auto; padding: max(2rem, env(safe-area-inset-top)) 1.25rem 2rem; }
 .eyebrow { color: #1d4ed8; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; }
 h1 { font-size: clamp(2rem, 8vw, 3.25rem); margin: .4rem 0 1rem; }
