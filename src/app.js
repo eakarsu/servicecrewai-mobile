@@ -62,3 +62,5 @@ healthCheck.addEventListener('click', async () => {
     clearTimeout(timeout);
   }
 });
+
+const nativeWorkspace=document.createElement('a');nativeWorkspace.textContent='AI workspace';nativeWorkspace.href=(configuredUrl()||'').replace(/\/$/,'')+'/ai-workspace';nativeWorkspace.target='_blank';nativeWorkspace.rel='noopener';form.after(nativeWorkspace);form.addEventListener('submit',()=>{nativeWorkspace.href=configuredUrl().replace(/\/$/,'')+'/ai-workspace';});

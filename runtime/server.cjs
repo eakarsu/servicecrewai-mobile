@@ -1,3 +1,4 @@
+const {serveNativePromptConsole}=require('./serveNativePromptConsole.cjs');
 'use strict';
 const crypto = require('node:crypto');
 const http = require('node:http');
@@ -41,6 +42,7 @@ const server = http.createServer(async (request, response) => {
     if (origin) { response.setHeader('access-control-allow-origin', origin); response.setHeader('vary', 'Origin'); }
     if (request.method === 'OPTIONS') { response.writeHead(204, { 'access-control-allow-methods': 'GET,POST,OPTIONS', 'access-control-allow-headers': 'authorization,content-type' }); return response.end(); }
     const url = new URL(request.url, `http://${host}:${port}`);
+    if(request.method==='GET'&&url.pathname==='/ai-workspace')return serveNativePromptConsole(response);
     if (request.method === 'GET' && ['/health', '/api/health'].includes(url.pathname)) { query('SELECT 1'); return send(response, 200, { status: 'ok', database: 'reachable', service: 'servicecrew-runtime' }); }
     if (request.method === 'GET' && url.pathname === '/api/auth/demo-credentials') {
       if (process.env.NODE_ENV === 'production') return send(response, 404, { error: 'Not found' });
@@ -58,6 +60,11 @@ const server = http.createServer(async (request, response) => {
     }
     const user = currentUser(request);
     if (request.method === 'GET' && url.pathname === '/api/auth/me') return user ? send(response, 200, { user }) : send(response, 401, { error: 'Bearer token required' });
+    if (request.method === 'GET' && url.pathname === '/api/runtime-ai/history') {
+      if (!user) return send(response, 401, { error: 'Bearer token required' });
+      const rows = query(`SELECT COALESCE(json_agg(row_to_json(receipt_row) ORDER BY receipt_row.created_at DESC),'[]'::json)::text FROM (SELECT id,model,prompt,content,created_at FROM servicecrew_ai_provider_receipts WHERE user_id=${Number(user.id)} ORDER BY created_at DESC LIMIT 100) receipt_row`);
+      return send(response, 200, { history: JSON.parse(rows || '[]') });
+    }
     if (request.method === 'POST' && url.pathname === '/api/runtime-ai/recommendation') {
       if (!user) return send(response, 401, { error: 'Bearer token required' });
       const payload = await body(request); const prompt = typeof payload.prompt === 'string' ? payload.prompt.trim() : '';
